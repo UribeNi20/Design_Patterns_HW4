@@ -47,10 +47,13 @@ class BarGraphView extends JPanel implements Observer {
         int barHeight = (getHeight() - (numbers.size() - 1) * barSpacing) / numbers.size();
         int y = 0;
 
+        Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE}; // Define the colors
+
         for (int i = 0; i < numbers.size(); i++) {
             int value = numbers.get(i);
             int barWidth = (int) ((double) value / 100 * maxBarWidth);
             int x = 0;
+            g.setColor(colors[i % colors.length]); // Set the color for the bar
             g.fillRect(x, y, barWidth, barHeight);
             y += barHeight + barSpacing;
         }
