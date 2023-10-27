@@ -114,9 +114,9 @@ public class EditableBarGraphApp {
             JPanel textFieldsPanel = new JPanel();
             textFieldsPanel.setLayout(new GridLayout(3, 1));
 
-            JTextField textField1 = new JTextField("50");
-            JTextField textField2 = new JTextField("75");
-            JTextField textField3 = new JTextField("30");
+            JTextField textField1 = new JTextField();
+            JTextField textField2 = new JTextField();
+            JTextField textField3 = new JTextField();
 
             textFieldsPanel.add(textField1);
             textFieldsPanel.add(textField2);
