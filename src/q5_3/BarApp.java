@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-//code
-class NumberModel extends Observable {
+/**
+ * Handling the data within the graph
+ * Post: An updated list of graph numbers
+ */
+class GraphNumber extends Observable {
     private List<Integer> numbers = new ArrayList<>();
 
     public void setNumbers(List<Integer> numbers) {
@@ -29,11 +32,17 @@ class NumberModel extends Observable {
     }
 }
 
-class BarGraphView extends JPanel implements Observer {
-    private NumberModel model;
+/**
+ * How to actually see the bar graph
+ * Pre: GraphDataModel
+ * Post: The graph created from the data
+ */
+
+class BarGraph extends JPanel implements Observer {
+    private GraphNumber model;
     private int barSpacing = 10; // Adjust the spacing between bars here
 
-    public BarGraphView(NumberModel model) {
+    public BarGraph(GraphNumber model) {
         this.model = model;
         model.addObserver(this);
     }
@@ -66,12 +75,17 @@ class BarGraphView extends JPanel implements Observer {
     }
 }
 
+/**
+ * Taking user input
+ * Pre: GraphDataModel, JTextField
+ * Post: The user input updates the model
+ */
 class NumberController implements KeyListener {
-    private NumberModel model;
+    private GraphNumber model;
     private JTextField textField;
     private int index;
 
-    public NumberController(NumberModel model, JTextField textField, int index) {
+    public NumberController(GraphNumber model, JTextField textField, int index) {
         this.model = model;
         this.textField = textField;
         this.index = index;
@@ -99,16 +113,16 @@ class NumberController implements KeyListener {
     }
 }
 
-public class EditableBarGraphApp {
+public class BarApp {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            NumberModel model = new NumberModel();
+            GraphNumber model = new GraphNumber();
             JFrame frame = new JFrame("Editable Bar Graphs");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new GridLayout(1, 2));
 
             // Left Panel (Bar Graphs)
-            BarGraphView barGraphView = new BarGraphView(model);
+            BarGraph barGraphView = new BarGraph(model);
             frame.add(barGraphView);
 
             // Right Panel (TextFields)
