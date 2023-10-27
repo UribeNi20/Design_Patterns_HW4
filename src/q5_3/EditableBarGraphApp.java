@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+//code
 class NumberModel extends Observable {
     private List<Integer> numbers = new ArrayList<>();
 
