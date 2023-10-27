@@ -1,3 +1,8 @@
+/*
+Nicolas Uribe
+Homework 4
+COP 4331 002
+ */
 package q5_3;
 
 import javax.swing.*;
@@ -13,26 +18,33 @@ import java.util.Observer;
  * Post: An updated list of graph numbers
  */
 class GraphNumber extends Observable {
-    private List<Integer> numbers = new ArrayList<>();
-
+    private List<Integer> data = new ArrayList<>();
+    //List of number
     public void setNumbers(List<Integer> numbers) {
-        this.numbers = numbers;
+        this.data = numbers;
         setChanged();
         notifyObservers();
     }
+    //Returns current list of numbers
 
     public List<Integer> getNumbers() {
-        return numbers;
+        return data;
     }
 
+    /**
+     * Updates number in list and user is noted
+     * @param index
+     * @param value
+     */
     public void updateNumber(int index, int value) {
-        numbers.set(index, value);
+        data.set(index, value);
         setChanged();
         notifyObservers();
     }
 }
 
 /**
+ * JPanel visualizes graph numbers
  * How to actually see the bar graph
  * Pre: GraphDataModel
  * Post: The graph created from the data
@@ -40,7 +52,7 @@ class GraphNumber extends Observable {
 
 class BarGraph extends JPanel implements Observer {
     private GraphNumber model;
-    private int barSpacing = 10; // Adjust the spacing between bars here
+    private int spacing = 10; // space between the bars
 
     public BarGraph(GraphNumber model) {
         this.model = model;
@@ -54,18 +66,18 @@ class BarGraph extends JPanel implements Observer {
         List<Integer> numbers = model.getNumbers();
 
         int maxBarWidth = getWidth();
-        int barHeight = (getHeight() - (numbers.size() - 1) * barSpacing) / numbers.size();
+        int barHeight = (getHeight() - (numbers.size() - 1) * spacing) / numbers.size();
         int y = 0;
 
-        Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE}; // Define the colors
+        Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE}; //Different colors for the bars
 
         for (int i = 0; i < numbers.size(); i++) {
             int value = numbers.get(i);
             int barWidth = (int) ((double) value / 100 * maxBarWidth);
             int x = 0;
-            g.setColor(colors[i % colors.length]); // Set the color for the bar
+            g.setColor(colors[i % colors.length]);
             g.fillRect(x, y, barWidth, barHeight);
-            y += barHeight + barSpacing;
+            y += barHeight + spacing;
         }
     }
 
@@ -79,17 +91,16 @@ class BarGraph extends JPanel implements Observer {
  * Taking user input
  * Pre: GraphDataModel, JTextField
  * Post: The user input updates the model
- */
-class NumberController implements KeyListener {
+ */class NumberController implements KeyListener {
     private GraphNumber model;
-    private JTextField textField;
+    private JTextField text;
     private int index;
 
-    public NumberController(GraphNumber model, JTextField textField, int index) {
+    public NumberController(GraphNumber model, JTextField text, int index) {
         this.model = model;
-        this.textField = textField;
+        this.text = text;
         this.index = index;
-        textField.addKeyListener(this);
+        text.addKeyListener(this);
     }
 
     @Override
@@ -105,7 +116,7 @@ class NumberController implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         try {
-            int value = Integer.parseInt(textField.getText());
+            int value = Integer.parseInt(text.getText());
             model.updateNumber(index, value);
         } catch (NumberFormatException ex) {
             // Handle invalid input
@@ -121,35 +132,36 @@ public class BarApp {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new GridLayout(1, 2));
 
-            // Left Panel (Bar Graphs)
+            // Left- Graphs
             BarGraph barGraphView = new BarGraph(model);
             frame.add(barGraphView);
 
-            // Right Panel (TextFields)
+            // Right- TextFields
             JPanel textFieldsPanel = new JPanel();
             textFieldsPanel.setLayout(new GridLayout(3, 1));
 
-            JTextField textField1 = new JTextField();
-            JTextField textField2 = new JTextField();
-            JTextField textField3 = new JTextField();
+            // Placeholder numbers
+            JTextField text1 = new JTextField("0");
+            JTextField text2 = new JTextField("50");
+            JTextField text3 = new JTextField("100");
 
-            textFieldsPanel.add(textField1);
-            textFieldsPanel.add(textField2);
-            textFieldsPanel.add(textField3);
+            textFieldsPanel.add(text1);
+            textFieldsPanel.add(text2);
+            textFieldsPanel.add(text3);
 
             frame.add(textFieldsPanel);
 
             // Controllers
-            NumberController controller1 = new NumberController(model, textField1, 0);
-            NumberController controller2 = new NumberController(model, textField2, 1);
-            NumberController controller3 = new NumberController(model, textField3, 2);
+            NumberController controller1 = new NumberController(model, text1, 0);
+            NumberController controller2 = new NumberController(model, text2, 1);
+            NumberController controller3 = new NumberController(model, text3, 2);
 
             // Set initial data
-            List<Integer> initialNumbers = new ArrayList<>();
-            initialNumbers.add(50);
-            initialNumbers.add(75);
-            initialNumbers.add(30);
-            model.setNumbers(initialNumbers);
+            List<Integer> startingNumbers = new ArrayList<>();
+            startingNumbers.add(0);
+            startingNumbers.add(50);
+            startingNumbers.add(100);
+            model.setNumbers(startingNumbers);
 
             frame.pack();
             frame.setVisible(true);
